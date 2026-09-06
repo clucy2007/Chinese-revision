@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=overlays-content">
+<title>中文 Revision</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23de2910'/><circle cx='11' cy='11' r='4' fill='%23ffde00'/></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#030712;color:#f3f4f6;min-height:100vh}
+.app{max-width:520px;margin:0 auto;padding:16px;min-height:100vh;display:flex;flex-direction:column}
+#screen-quiz{display:flex;flex-direction:column;justify-content:center;min-height:100vh;min-height:100dvh}
+.btn{border:none;cursor:pointer;font-family:inherit;font-size:14px;border-radius:12px;padding:10px 20px;font-weight:600;transition:all .15s}
+.btn-primary{background:#ef4444;color:#fff}.btn-primary:hover{background:#f87171}
+.btn-secondary{background:#1f2937;color:#d1d5db}.btn-secondary:hover{background:#374151}
+.btn-ghost{background:transparent;color:#6b7280;padding:6px 12px}.btn-ghost:hover{color:#d1d5db}
+.btn-full{width:100%}.btn-lg{padding:14px 24px;font-size:18px}.btn-sm{padding:6px 12px;font-size:12px;border-radius:8px}
+.input{width:100%;background:#111827;border:1px solid #374151;border-radius:12px;padding:12px 16px;color:#f3f4f6;font-size:16px;font-family:inherit;outline:none;transition:border-color .15s}
+.input:focus{border-color:#ef4444}.input::placeholder{color:#4b5563}
+.stars{display:inline-flex;gap:2px}.star{font-size:14px}.star-1{color:#fbbf24}.star-2{color:#f97316}.star-3{color:#22d3ee}.star-empty{color:#4b5563}
+.progress-bar{width:100%;background:#1f2937;border-radius:999px;overflow:hidden}
+.progress-bar-sm{height:6px}.progress-bar-xs{height:4px}
+.progress-fill{height:100%;background:#ef4444;border-radius:999px;transition:width .5s}
+.menu-title{text-align:center;padding-top:16px;margin-bottom:24px}
+.menu-title h1{font-size:28px;font-weight:700;letter-spacing:-.5px}
+.menu-title .accent{color:#f87171}
+.menu-title .subtitle{color:#6b7280;font-size:13px;margin-top:4px}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.section-label{font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.cat-btn{background:#111827;border:1px solid #1f2937;border-radius:10px;padding:8px;cursor:pointer;text-align:left;transition:all .15s;color:#9ca3af}
+.cat-btn:hover{border-color:#374151}
+.cat-btn.selected{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#fca5a5}
+.cat-btn .cat-icon{font-size:18px;margin-bottom:2px}
+.cat-btn .cat-name{font-size:13px;font-weight:500;display:block}
+.cat-btn .cat-stat{font-size:11px;opacity:.6}
+.actions{margin-top:24px;display:flex;flex-direction:column;gap:8px}
+.actions-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.quiz-top .back{font-size:13px;color:#6b7280;cursor:pointer;background:none;border:none;font-family:inherit}
+.quiz-top .back:hover{color:#d1d5db}
+.quiz-top .stats{font-size:13px;color:#6b7280}
+.info-btn{background:none;border:1px solid #374151;border-radius:50%;width:24px;height:24px;font-size:13px;color:#6b7280;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:inherit;line-height:1}
+.info-btn:hover{border-color:#6b7280;color:#d1d5db}
+.quiz-card{border-radius:16px;padding:10px 16px;text-align:center;margin:6px 0;transition:all .3s;border:2px solid #1f2937;background:#111827}
+@media(min-height:700px){.quiz-card{padding:20px 24px;margin:12px 0}}
+.quiz-card.correct{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.4)}
+.quiz-card.tier-up{background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.4);box-shadow:0 0 16px rgba(251,191,36,.1)}
+.quiz-card.mastered{background:rgba(34,211,238,.08);border-color:rgba(34,211,238,.5);box-shadow:0 0 20px rgba(34,211,238,.15)}
+.quiz-card.wrong{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.4)}
+.quiz-cat{font-size:11px;color:#4b5563;margin-bottom:4px;display:block}
+.quiz-hint-area{height:20px;margin-bottom:2px}
+.quiz-furigana{color:#fca5a5;font-size:18px;font-family:'Noto Sans SC',sans-serif}
+.quiz-japanese{font-size:40px;font-weight:700;margin-bottom:4px;font-family:'Noto Sans SC',sans-serif;letter-spacing:.02em;line-height:1.1}
+.quiz-japanese.char-mode{font-size:64px;margin-bottom:2px}
+.romaji-hint{font-size:13px;color:#4b5563;letter-spacing:.05em;margin-bottom:12px;height:18px}
+.hint-btn{font-size:12px;color:#6b7280;border:1px solid #374151;border-radius:8px;padding:4px 12px;background:transparent;cursor:pointer;transition:color .15s}
+.hint-btn:hover{color:#d1d5db}
+.spacer-hint{height:8px}
+.speak-btn{background:none;border:1px solid #374151;border-radius:8px;color:#9ca3af;cursor:pointer;font-size:16px;padding:2px 12px;margin-bottom:4px;transition:all .15s}
+.speak-btn:hover{border-color:#6b7280;color:#f3f4f6}
+.speak-btn-sm{background:none;border:none;color:#4b5563;cursor:pointer;font-size:13px;padding:2px 4px;transition:color .15s}
+.speak-btn-sm:hover{color:#f3f4f6}
+.feedback-correct{color:#34d399;font-size:20px;font-weight:700;margin-bottom:8px}
+.feedback-wrong{color:#f87171;font-size:20px;font-weight:700;margin-bottom:8px}
+.feedback-answers{color:#9ca3af;font-size:14px}
+.feedback-answers .highlight{color:#fcd34d}
+.feedback-typed{color:#6b7280;font-size:12px;margin-top:4px}
+.input-row{display:flex;gap:8px}
+.input-row .input{flex:1;border-radius:12px}
+.input-row .btn{border-radius:12px;padding:12px 20px}
+.done-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.done-emoji{font-size:56px;margin-bottom:16px}
+.done-title{font-size:24px;font-weight:700;margin-bottom:8px}
+.done-stat{color:#9ca3af;margin-bottom:2px}
+.done-pct{color:#6b7280;font-size:13px;margin-bottom:24px}
+.done-actions{display:flex;flex-direction:column;gap:8px;width:260px}
+.add-form{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.field-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.add-msg{font-size:13px;margin-top:4px}.add-msg.error{color:#f87171}.add-msg.success{color:#34d399}
+.custom-list{display:flex;flex-direction:column;gap:4px}
+.custom-item{display:flex;align-items:center;justify-content:space-between;background:#111827;border-radius:8px;padding:8px 12px}
+.custom-item-text{font-size:14px}.custom-item-text .jp{font-weight:500}
+.custom-item-text .furi{color:#6b7280;font-size:12px;margin-left:6px}
+.custom-item-text .en{color:#9ca3af;font-size:13px;margin-left:8px}
+.delete-btn{background:none;border:none;color:#4b5563;cursor:pointer;font-size:14px;padding:4px 8px}
+.delete-btn:hover{color:#f87171}
+.filter-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.filter-btn{font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer;border:1px solid #1f2937;background:#111827;color:#6b7280;transition:all .15s;font-family:inherit}
+.filter-btn.active{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#fca5a5}
+.browse-top{position:sticky;top:0;background:#030712;z-index:10;padding:8px 0 4px 0}
+.browse-back{font-size:13px;color:#6b7280;cursor:pointer;background:none;border:1px solid #374151;border-radius:20px;font-family:inherit;padding:6px 14px;transition:all .15s;margin-bottom:8px}
+.browse-back:hover{color:#d1d5db;border-color:#6b7280}
+.cat-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #1f2937}
+.cat-nav-btn{font-size:11px;padding:4px 8px;border-radius:6px;cursor:pointer;border:1px solid #1f2937;background:#111827;color:#6b7280;transition:all .15s;font-family:inherit;white-space:nowrap}
+.cat-nav-btn:hover{border-color:#374151;color:#d1d5db}
+.browse-group-label{font-size:11px;color:#4b5563;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;margin-top:12px;padding:4px 0;scroll-margin-top:240px}
+.browse-item{display:flex;align-items:center;justify-content:space-between;background:rgba(17,24,39,.5);border-radius:6px;padding:6px 12px;margin-bottom:2px;font-size:13px}
+.browse-item .jp{font-weight:500}.browse-item .furi{color:#4b5563;font-size:11px;margin-left:6px}.browse-item .en{color:#6b7280;margin-left:8px}
+.edit-btn{background:none;border:none;color:#4b5563;cursor:pointer;font-size:13px;padding:2px 6px;margin-left:4px;transition:color .15s}
+.edit-btn:hover{color:#fbbf24}
+.edit-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+.edit-modal{background:#111827;border:1px solid #374151;border-radius:16px;padding:24px;max-width:420px;width:100%}
+.edit-modal h3{font-size:18px;font-weight:700;margin-bottom:4px}
+.edit-modal .edit-jp{color:#fca5a5;font-size:14px;margin-bottom:16px;font-family:'Noto Sans SC',sans-serif}
+.edit-modal .edit-actions{display:flex;gap:8px;margin-top:16px}
+.edit-modal .edit-actions .btn{flex:1}
+.screen-title{font-size:20px;font-weight:700;margin-bottom:12px}
+.volume-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding:8px 12px;background:#111827;border-radius:10px}
+.volume-icon{cursor:pointer;font-size:18px;user-select:none;line-height:1}
+.volume-slider{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:#374151;outline:none}
+.volume-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:#ef4444;cursor:pointer;border:none}
+.volume-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#ef4444;cursor:pointer;border:none}
+.streak-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#111827;border-radius:10px;margin-bottom:12px}
+.mode-btn{background:#1f2937;border:1px solid #374151;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:500;cursor:pointer;color:#d1d5db;font-family:inherit;transition:all .15s;text-align:center}
+.mode-btn.active{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.5);color:#fca5a5}
+.len-btn{background:#1f2937;border:1px solid #374151;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:500;cursor:pointer;color:#d1d5db;font-family:inherit;transition:all .15s}
+.len-btn.active{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.5);color:#fca5a5}
+.choice-btn{background:#1f2937;border:1px solid #374151;border-radius:10px;padding:12px 8px;font-size:14px;cursor:pointer;color:#d1d5db;font-family:inherit;transition:all .15s;text-align:center}
+.choice-btn:hover:not(:disabled){background:#374151}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<div id="screen-menu">
+<div class="menu-title"><h1><span class="accent">中文</span> Revision</h1><p class="subtitle" id="menu-mastered-text"></p><div class="progress-bar progress-bar-sm" style="margin-top:8px"><div class="progress-fill" id="menu-progress-fill"></div></div></div>
+<div class="streak-bar" id="streak-bar"></div>
+<div class="section-header"><span class="section-label">Lessons</span><div><button class="btn-ghost btn-sm" onclick="selectAllLessons()">All</button><button class="btn-ghost btn-sm" onclick="selectNoLessons()">None</button></div></div>
+<div class="cat-grid" id="cat-grid"></div>
+<div class="actions">
+<button class="btn btn-primary btn-full btn-lg" id="start-quiz-btn" onclick="openQuizModal()">Start Quiz</button>
+<div class="actions-row"><button class="btn btn-secondary btn-full" onclick="showScreen('browse')">Browse Words</button><button class="btn btn-secondary btn-full" onclick="showScreen('add')">Add Words</button></div>
+<div class="actions-row" style="margin-top:4px"><button class="btn btn-secondary btn-full" onclick="openStats()">📊 Stats</button><button class="btn btn-secondary btn-full" onclick="openSettings()">⚙️ Settings</button></div>
+<div class="actions-row" style="margin-top:4px"><button class="btn btn-secondary btn-full btn-sm" onclick="exportData()">Export Data</button><button class="btn btn-secondary btn-full btn-sm" onclick="document.getElementById('import-file').click()">Import Data</button><input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)"></div>
+<button class="btn btn-ghost btn-full" style="font-size:13px;color:#6b7280;margin-top:4px" onclick="resetProgress()">Reset Progress</button>
+</div></div>
+
+<div id="screen-quiz" class="hidden">
+<div class="quiz-top"><button class="back" onclick="showScreen('menu')">&#8592; Back</button><span class="stats" id="quiz-stats"></span><button class="info-btn" onclick="showQuizInfo()" title="How scoring works">ℹ</button></div>
+<div class="progress-bar progress-bar-xs" style="margin-bottom:4px"><div class="progress-fill" id="quiz-progress-fill"></div></div>
+<div id="quiz-card" class="quiz-card"></div>
+</div>
+
+<div id="screen-done" class="hidden done-screen"><div class="done-emoji">&#127881;</div><div class="done-title">Session Complete</div><p class="done-stat" id="done-stat"></p><p class="done-pct" id="done-pct"></p><div class="done-actions"><button class="btn btn-primary btn-full" onclick="startQuiz()">Go Again</button><button class="btn btn-ghost btn-full" onclick="showScreen('menu')">Back to Menu</button></div></div>
+
+<div id="screen-add" class="hidden">
+<button class="browse-back" onclick="showScreen('menu')">&#8592; Back</button>
+<div class="screen-title">Add Custom Words</div>
+<div class="add-form"><div><div class="field-label">Chinese (Hanzi)</div><input class="input" id="add-japanese" placeholder="e.g. 你好"></div><div><div class="field-label">Pinyin (optional)</div><input class="input" id="add-furigana" placeholder="e.g. nǐ hǎo"></div><div><div class="field-label">English (semicolon-separated)</div><input class="input" id="add-english" placeholder="e.g. hello; hi" onkeydown="if(event.key==='Enter')addWord()"></div><button class="btn btn-primary btn-full" onclick="addWord()">Add Word</button><div class="add-msg hidden" id="add-msg"></div></div>
+<div id="custom-list-section" class="hidden"><div class="section-label" style="margin-bottom:8px" id="custom-list-label"></div><div class="custom-list" id="custom-list"></div></div></div>
+
+<div id="screen-browse" class="hidden">
+<div class="browse-top"><button class="browse-back" onclick="showScreen('menu')">&#8592; Back</button><input class="input" id="browse-search" placeholder="Search words..." oninput="renderBrowse()" style="margin-bottom:8px;font-size:14px;padding:10px 14px"><div class="filter-row" id="browse-filters"></div><div class="cat-nav" id="cat-nav"></div></div>
+<div id="browse-list"></div></div>
+</div>
+<script>
+const LESSONS = {
+  "l4":{name:"L4 Shopping",icon:"🛍️"},
+  "l5":{name:"L5 Choosing Classes",icon:"🎓"},
+  "l6":{name:"L6 Dating",icon:"💕"},
+  "l7":{name:"L7 Computers & Internet",icon:"💻"},
+  "l8":{name:"L8 Working Part-Time",icon:"💼"},
+  custom:{name:"Custom",icon:"➕"}
+};
+const CAT_ORDER=Object.keys(LESSONS);
+const VOCAB_DATA = [
+  // L4 Shopping
+  {id:"l4-1",lesson:"l4",japanese:"像",furigana:"xiàng",english:["to resemble", "to be like"]},
+  {id:"l4-2",lesson:"l4",japanese:"T恤衫",furigana:"tīxùshān",english:["T-shirt"]},
+  {id:"l4-3",lesson:"l4",japanese:"毛衣",furigana:"máoyī",english:["woolen sweater", "sweater"]},
+  {id:"l4-4",lesson:"l4",japanese:"牛仔裤",furigana:"niúzǎikù",english:["jeans"]},
+  {id:"l4-5",lesson:"l4",japanese:"无论",furigana:"wúlùn",english:["regardless of", "whether it be"]},
+  {id:"l4-6",lesson:"l4",japanese:"需要",furigana:"xūyào",english:["to need", "needs"]},
+  {id:"l4-7",lesson:"l4",japanese:"卫生纸",furigana:"wèishēngzhǐ",english:["toilet paper"]},
+  {id:"l4-8",lesson:"l4",japanese:"牙膏",furigana:"yágāo",english:["toothpaste"]},
+  {id:"l4-9",lesson:"l4",japanese:"毛巾",furigana:"máojīn",english:["towel"]},
+  {id:"l4-10",lesson:"l4",japanese:"洗衣粉",furigana:"xǐyīfěn",english:["laundry powder"]},
+  {id:"l4-11",lesson:"l4",japanese:"购物",furigana:"gòuwù",english:["to shop"]},
+  {id:"l4-12",lesson:"l4",japanese:"牌子",furigana:"páizi",english:["brand"]},
+  {id:"l4-13",lesson:"l4",japanese:"价钱",furigana:"jiàqian",english:["price"]},
+  {id:"l4-14",lesson:"l4",japanese:"纯棉",furigana:"chúnmián",english:["pure cotton", "one-hundred-percent cotton"]},
+  {id:"l4-15",lesson:"l4",japanese:"名牌",furigana:"míngpái",english:["famous brand", "name brand"]},
+  {id:"l4-16",lesson:"l4",japanese:"时髦",furigana:"shímáo",english:["fashionable", "stylish"]},
+  {id:"l4-17",lesson:"l4",japanese:"哎呀",furigana:"āiyā",english:["gosh", "ah (exclamation of surprise)"]},
+  {id:"l4-18",lesson:"l4",japanese:"质量",furigana:"zhìliàng",english:["quality"]},
+  {id:"l4-19",lesson:"l4",japanese:"只好",furigana:"zhǐhǎo",english:["to be forced to", "to have no choice but"]},
+  {id:"l4-20",lesson:"l4",japanese:"道理",furigana:"dàoli",english:["reason", "sense"]},
+  {id:"l4-21",lesson:"l4",japanese:"非…不可",furigana:"fēi… bù kě",english:["have to", "nothing but … would do"]},
+  {id:"l4-22",lesson:"l4",japanese:"标准",furigana:"biāozhǔn",english:["criterion", "standard"]},
+  {id:"l4-23",lesson:"l4",japanese:"在乎",furigana:"zàihu",english:["to mind", "to care"]},
+  {id:"l4-24",lesson:"l4",japanese:"同意",furigana:"tóngyì",english:["to agree"]},
+  {id:"l4-25",lesson:"l4",japanese:"好看",furigana:"hǎokàn",english:["nice-looking", "attractive"]},
+  {id:"l4-26",lesson:"l4",japanese:"一会儿",furigana:"yíhuìr",english:["in a moment", "a little while"]},
+  {id:"l4-27",lesson:"l4",japanese:"现金",furigana:"xiànjīn",english:["cash"]},
+  {id:"l4-28",lesson:"l4",japanese:"加",furigana:"jiā",english:["to add"]},
+  {id:"l4-29",lesson:"l4",japanese:"税",furigana:"shuì",english:["tax"]},
+
+  // L5 Choosing Classes
+  {id:"l5-1",lesson:"l5",japanese:"选",furigana:"xuǎn",english:["to choose"]},
+  {id:"l5-2",lesson:"l5",japanese:"门",furigana:"mén",english:["measure word for academic courses"]},
+  {id:"l5-3",lesson:"l5",japanese:"世界",furigana:"shìjiè",english:["world"]},
+  {id:"l5-4",lesson:"l5",japanese:"历史",furigana:"lìshǐ",english:["history"]},
+  {id:"l5-5",lesson:"l5",japanese:"其他",furigana:"qítā",english:["other", "else"]},
+  {id:"l5-6",lesson:"l5",japanese:"文章",furigana:"wénzhāng",english:["essay", "article"]},
+  {id:"l5-7",lesson:"l5",japanese:"受不了",furigana:"shòu bu liǎo",english:["cannot take it", "unable to bear"]},
+  {id:"l5-8",lesson:"l5",japanese:"轻松",furigana:"qīngsōng",english:["light", "relaxed"]},
+  {id:"l5-9",lesson:"l5",japanese:"教授",furigana:"jiàoshòu",english:["professor"]},
+  {id:"l5-10",lesson:"l5",japanese:"讨论",furigana:"tǎolùn",english:["to discuss"]},
+  {id:"l5-11",lesson:"l5",japanese:"意见",furigana:"yìjiàn",english:["opinion"]},
+  {id:"l5-12",lesson:"l5",japanese:"碰见",furigana:"pèng jiàn",english:["to run into (someone by chance)"]},
+  {id:"l5-13",lesson:"l5",japanese:"毕业",furigana:"bì yè",english:["to graduate"]},
+  {id:"l5-14",lesson:"l5",japanese:"学位",furigana:"xuéwèi",english:["academic degree"]},
+  {id:"l5-15",lesson:"l5",japanese:"化学",furigana:"huàxué",english:["chemistry"]},
+  {id:"l5-16",lesson:"l5",japanese:"经济",furigana:"jīngjì",english:["economics", "economy"]},
+  {id:"l5-17",lesson:"l5",japanese:"系",furigana:"xì",english:["academic department"]},
+  {id:"l5-18",lesson:"l5",japanese:"学分",furigana:"xuéfēn",english:["academic credit"]},
+  {id:"l5-19",lesson:"l5",japanese:"决定",furigana:"juédìng",english:["to decide", "decision"]},
+  {id:"l5-20",lesson:"l5",japanese:"解决",furigana:"jiějué",english:["to solve", "to resolve"]},
+  {id:"l5-21",lesson:"l5",japanese:"建议",furigana:"jiànyì",english:["suggestion", "to suggest"]},
+  {id:"l5-22",lesson:"l5",japanese:"要么…，要么…",furigana:"yàome…, yàome…",english:["if it's not… it's…", "either… or…"]},
+  {id:"l5-23",lesson:"l5",japanese:"工学院",furigana:"gōng xuéyuàn",english:["school of engineering"]},
+  {id:"l5-24",lesson:"l5",japanese:"管理学院",furigana:"guǎnlǐ xuéyuàn",english:["school of management"]},
+  {id:"l5-25",lesson:"l5",japanese:"谈",furigana:"tán",english:["to talk", "to discuss"]},
+  {id:"l5-26",lesson:"l5",japanese:"文学",furigana:"wénxué",english:["literature"]},
+  {id:"l5-27",lesson:"l5",japanese:"将来",furigana:"jiānglái",english:["future"]},
+  {id:"l5-28",lesson:"l5",japanese:"挣钱",furigana:"zhèng qián",english:["to earn money"]},
+  {id:"l5-29",lesson:"l5",japanese:"金融",furigana:"jīnróng",english:["finance", "banking"]},
+  {id:"l5-30",lesson:"l5",japanese:"整天",furigana:"zhěng tiān",english:["all day long"]},
+  {id:"l5-31",lesson:"l5",japanese:"数字",furigana:"shùzì",english:["numeral", "figure", "digit"]},
+  {id:"l5-32",lesson:"l5",japanese:"打交道",furigana:"dǎ jiāodào",english:["to deal with"]},
+  {id:"l5-33",lesson:"l5",japanese:"哲学",furigana:"zhéxué",english:["philosophy"]},
+  {id:"l5-34",lesson:"l5",japanese:"管",furigana:"guǎn",english:["to control", "to manage", "to mind", "to care about"]},
+  {id:"l5-35",lesson:"l5",japanese:"申请",furigana:"shēnqǐng",english:["to apply (to a school or job)"]},
+  {id:"l5-36",lesson:"l5",japanese:"省下来",furigana:"shěng xia lai",english:["to save (money, time)"]},
+  {id:"l5-37",lesson:"l5",japanese:"李哲",furigana:"Lǐ Zhé",english:["Li Zhe (personal name)"]},
+
+  // L6 Dating
+  {id:"l6-1",lesson:"l6",japanese:"心事",furigana:"xīnshì",english:["something weighing on one's mind"]},
+  {id:"l6-2",lesson:"l6",japanese:"吵架",furigana:"chǎo jià",english:["to quarrel"]},
+  {id:"l6-3",lesson:"l6",japanese:"高中",furigana:"gāozhōng",english:["senior high school"]},
+  {id:"l6-4",lesson:"l6",japanese:"开朗",furigana:"kāilǎng",english:["extroverted", "open and cheerful"]},
+  {id:"l6-5",lesson:"l6",japanese:"迷",furigana:"mí",english:["fan", "to be infatuated with"]},
+  {id:"l6-6",lesson:"l6",japanese:"演唱会",furigana:"yǎnchànghuì",english:["vocal concert"]},
+  {id:"l6-7",lesson:"l6",japanese:"爱好",furigana:"àihào",english:["hobby", "interest", "to love (something)"]},
+  {id:"l6-8",lesson:"l6",japanese:"不同",furigana:"bù tóng",english:["different", "not the same"]},
+  {id:"l6-9",lesson:"l6",japanese:"相处",furigana:"xiāngchǔ",english:["to get along"]},
+  {id:"l6-10",lesson:"l6",japanese:"到底",furigana:"dàodǐ",english:["what on earth", "in the end"]},
+  {id:"l6-11",lesson:"l6",japanese:"发生",furigana:"fāshēng",english:["to happen", "to occur", "to take place"]},
+  {id:"l6-12",lesson:"l6",japanese:"背景",furigana:"bèijǐng",english:["background"]},
+  {id:"l6-13",lesson:"l6",japanese:"提",furigana:"tí",english:["to mention", "to bring up"]},
+  {id:"l6-14",lesson:"l6",japanese:"心",furigana:"xīn",english:["heart", "mind"]},
+  {id:"l6-15",lesson:"l6",japanese:"根本",furigana:"gēnběn",english:["at all", "simply"]},
+  {id:"l6-16",lesson:"l6",japanese:"一干二净",furigana:"yì gān èr jìng",english:["completely", "thoroughly"]},
+  {id:"l6-17",lesson:"l6",japanese:"生气",furigana:"shēng qì",english:["to get angry"]},
+  {id:"l6-18",lesson:"l6",japanese:"叫",furigana:"jiào",english:["to make (someone do something)"]},
+  {id:"l6-19",lesson:"l6",japanese:"陪",furigana:"péi",english:["to accompany"]},
+  {id:"l6-20",lesson:"l6",japanese:"答应",furigana:"dāying",english:["to agree (to do something)", "to promise"]},
+  {id:"l6-21",lesson:"l6",japanese:"电影院",furigana:"diànyǐngyuàn",english:["movie theater"]},
+  {id:"l6-22",lesson:"l6",japanese:"分手",furigana:"fēn shǒu",english:["to break up", "to part company"]},
+  {id:"l6-23",lesson:"l6",japanese:"原来",furigana:"yuánlái",english:["as a matter of fact", "original", "former"]},
+  {id:"l6-24",lesson:"l6",japanese:"马虎",furigana:"mǎhu",english:["careless", "perfunctory", "mediocre"]},
+  {id:"l6-25",lesson:"l6",japanese:"不停",furigana:"bùtíng",english:["continuously", "incessantly"]},
+  {id:"l6-26",lesson:"l6",japanese:"道歉",furigana:"dào qiàn",english:["to apologize"]},
+  {id:"l6-27",lesson:"l6",japanese:"态度",furigana:"tàidu",english:["attitude"]},
+  {id:"l6-28",lesson:"l6",japanese:"说不定",furigana:"shuōbudìng",english:["perhaps", "maybe"]},
+  {id:"l6-29",lesson:"l6",japanese:"实际上",furigana:"shíjìshang",english:["in fact", "in reality", "actually"]},
+  {id:"l6-30",lesson:"l6",japanese:"丢三拉四",furigana:"diū sān là sì",english:["scatterbrained", "forgetful"]},
+  {id:"l6-31",lesson:"l6",japanese:"钥匙",furigana:"yàoshi",english:["key"]},
+  {id:"l6-32",lesson:"l6",japanese:"交朋友",furigana:"jiāo péngyou",english:["to make friends"]},
+
+  // L7 Computers & Internet
+  {id:"l7-1",lesson:"l7",japanese:"网络",furigana:"wǎngluò",english:["network", "the Internet"]},
+  {id:"l7-2",lesson:"l7",japanese:"新闻",furigana:"xīnwén",english:["news"]},
+  {id:"l7-3",lesson:"l7",japanese:"资料",furigana:"zīliào",english:["material (reference, academic)"]},
+  {id:"l7-4",lesson:"l7",japanese:"游戏",furigana:"yóuxì",english:["game"]},
+  {id:"l7-5",lesson:"l7",japanese:"网站",furigana:"wǎngzhàn",english:["website"]},
+  {id:"l7-6",lesson:"l7",japanese:"博客",furigana:"bókè",english:["blog"]},
+  {id:"l7-7",lesson:"l7",japanese:"离开",furigana:"lí kāi",english:["to leave", "to depart from"]},
+  {id:"l7-8",lesson:"l7",japanese:"卡拉OK",furigana:"kǎlā ōukēi",english:["karaoke"]},
+  {id:"l7-9",lesson:"l7",japanese:"急忙",furigana:"jímáng",english:["hastily", "in a hurry"]},
+  {id:"l7-10",lesson:"l7",japanese:"下载",furigana:"xiàzài",english:["to download"]},
+  {id:"l7-11",lesson:"l7",japanese:"软件",furigana:"ruǎnjiàn",english:["software"]},
+  {id:"l7-12",lesson:"l7",japanese:"结果",furigana:"jiéguǒ",english:["as a result", "result"]},
+  {id:"l7-13",lesson:"l7",japanese:"杂志",furigana:"zázhì",english:["magazine"]},
+  {id:"l7-14",lesson:"l7",japanese:"垃圾",furigana:"lājī",english:["garbage", "trash"]},
+  {id:"l7-15",lesson:"l7",japanese:"落伍",furigana:"luòwǔ",english:["to lag behind", "to be outdated"]},
+  {id:"l7-16",lesson:"l7",japanese:"可靠",furigana:"kěkào",english:["dependable"]},
+  {id:"l7-17",lesson:"l7",japanese:"有用",furigana:"yǒuyòng",english:["useful"]},
+  {id:"l7-18",lesson:"l7",japanese:"外卖",furigana:"wàimài",english:["takeout"]},
+  {id:"l7-19",lesson:"l7",japanese:"衣食住行",furigana:"yī shí zhù xíng",english:["basic necessities of life (food, clothing, shelter, transportation)"]},
+  {id:"l7-20",lesson:"l7",japanese:"迟到",furigana:"chídào",english:["to arrive late"]},
+  {id:"l7-21",lesson:"l7",japanese:"老是",furigana:"lǎoshì",english:["always"]},
+  {id:"l7-22",lesson:"l7",japanese:"害",furigana:"hài",english:["to cause trouble", "to harm"]},
+  {id:"l7-23",lesson:"l7",japanese:"敢",furigana:"gǎn",english:["to dare"]},
+  {id:"l7-24",lesson:"l7",japanese:"待",furigana:"dāi",english:["to stay"]},
+  {id:"l7-25",lesson:"l7",japanese:"屋子",furigana:"wūzi",english:["room"]},
+  {id:"l7-26",lesson:"l7",japanese:"上瘾",furigana:"shàng yǐn",english:["to become addicted"]},
+  {id:"l7-27",lesson:"l7",japanese:"严重",furigana:"yánzhòng",english:["serious", "grave"]},
+  {id:"l7-28",lesson:"l7",japanese:"时代",furigana:"shídài",english:["era", "age"]},
+  {id:"l7-29",lesson:"l7",japanese:"重要",furigana:"zhòngyào",english:["important"]},
+  {id:"l7-30",lesson:"l7",japanese:"帮助",furigana:"bāngzhù",english:["to help", "help"]},
+  {id:"l7-31",lesson:"l7",japanese:"翻译",furigana:"fānyì",english:["to translate", "interpreter", "translation"]},
+  {id:"l7-32",lesson:"l7",japanese:"免费",furigana:"miǎnfèi",english:["free of charge"]},
+  {id:"l7-33",lesson:"l7",japanese:"感觉",furigana:"gǎnjué",english:["feeling", "sense perception", "to feel", "to perceive"]},
+
+  // L8 Working Part-Time
+  {id:"l8-1",lesson:"l8",japanese:"受到",furigana:"shòu dào",english:["to receive"]},
+  {id:"l8-2",lesson:"l8",japanese:"良好",furigana:"liánghǎo",english:["good", "fine"]},
+  {id:"l8-3",lesson:"l8",japanese:"教育",furigana:"jiàoyù",english:["education", "to educate"]},
+  {id:"l8-4",lesson:"l8",japanese:"生",furigana:"shēng",english:["to give birth to", "to be born"]},
+  {id:"l8-5",lesson:"l8",japanese:"存",furigana:"cún",english:["to deposit", "to accumulate"]},
+  {id:"l8-6",lesson:"l8",japanese:"收入",furigana:"shōurù",english:["income"]},
+  {id:"l8-7",lesson:"l8",japanese:"供",furigana:"gōng",english:["to provide", "to support financially"]},
+  {id:"l8-8",lesson:"l8",japanese:"压力",furigana:"yālì",english:["pressure"]},
+  {id:"l8-9",lesson:"l8",japanese:"大人",furigana:"dàren",english:["adult"]},
+  {id:"l8-10",lesson:"l8",japanese:"减轻",furigana:"jiǎnqīng",english:["to lessen"]},
+  {id:"l8-11",lesson:"l8",japanese:"负担",furigana:"fùdān",english:["burden"]},
+  {id:"l8-12",lesson:"l8",japanese:"适合",furigana:"shìhé",english:["to suit"]},
+  {id:"l8-13",lesson:"l8",japanese:"影响",furigana:"yǐngxiǎng",english:["to influence", "to have an impact", "influence"]},
+  {id:"l8-14",lesson:"l8",japanese:"家庭",furigana:"jiātíng",english:["family", "household"]},
+  {id:"l8-15",lesson:"l8",japanese:"取得",furigana:"qǔdé",english:["to obtain", "to gain", "to acquire"]},
+  {id:"l8-16",lesson:"l8",japanese:"经验",furigana:"jīngyàn",english:["experience", "to experience"]},
+  {id:"l8-17",lesson:"l8",japanese:"零用钱",furigana:"língyòngqián",english:["pocket money", "spending money"]},
+  {id:"l8-18",lesson:"l8",japanese:"奖学金",furigana:"jiǎngxuéjīn",english:["scholarship money"]},
+  {id:"l8-19",lesson:"l8",japanese:"交",furigana:"jiāo",english:["to hand over", "to turn in"]},
+  {id:"l8-20",lesson:"l8",japanese:"政府",furigana:"zhèngfǔ",english:["government"]},
+  {id:"l8-21",lesson:"l8",japanese:"贷款",furigana:"dàikuǎn",english:["loan", "to provide a loan"]},
+  {id:"l8-22",lesson:"l8",japanese:"农村",furigana:"nóngcūn",english:["countryside", "village", "rural area"]},
+  {id:"l8-23",lesson:"l8",japanese:"工资",furigana:"gōngzī",english:["wages", "pay"]},
+  {id:"l8-24",lesson:"l8",japanese:"低",furigana:"dī",english:["low"]},
+  {id:"l8-25",lesson:"l8",japanese:"家教",furigana:"jiājiào",english:["tutor"]},
+  {id:"l8-26",lesson:"l8",japanese:"遛",furigana:"liù",english:["to walk (an animal)", "to stroll"]},
+  {id:"l8-27",lesson:"l8",japanese:"喂",furigana:"wèi",english:["to feed"]},
+  {id:"l8-28",lesson:"l8",japanese:"猫",furigana:"māo",english:["cat"]},
+  {id:"l8-29",lesson:"l8",japanese:"读书",furigana:"dú shū",english:["to attend school", "to study", "to read aloud"]},
+  {id:"l8-30",lesson:"l8",japanese:"借",furigana:"jiè",english:["to borrow", "to lend"]},
+  {id:"l8-31",lesson:"l8",japanese:"欠",furigana:"qiàn",english:["to owe"]},
+  {id:"l8-32",lesson:"l8",japanese:"银行",furigana:"yínháng",english:["bank"]},
+  {id:"l8-33",lesson:"l8",japanese:"难怪",furigana:"nánguài",english:["no wonder"]},
+  {id:"l8-34",lesson:"l8",japanese:"乖",furigana:"guāi",english:["obedient", "well-behaved"]},
+];
+
+
+
+// ============ STATE ============
+let progress={},customWords=[],selectedLessons=new Set(),wordOverrides={};
+let quizQueue=[],quizIdx=0,quizAnswered=0,quizCorrect=0,quizFeedback=null,quizShowHint=false,quizLastInput="";
+let showNewWordCard=true; // settings toggle
+let currentStreak=0; // in-quiz consecutive correct
+// Within-session Leitner buckets: tracks how many times each word answered correctly this session
+// Bucket spacing: 0->requeue in 2-4, 1->requeue in 4-7, 2->requeue in 8-12, 3=graduated
+const SESSION_GAPS=[3,6,10]; // min gap before re-showing per bucket level
+let sessionBuckets={}; // id -> {bucket, lastSeen}
+let volume=0.7,browseFilter="all";
+let quizMode="normal"; // normal|reverse|listen|choice
+let sessionLimit=0; // 0=full
+let timedMode=false,timerInterval=null,timerLeft=0;
+const TIMER_SECS=10;
+const SRS_INTERVALS=[1,3,7,14,30,90]; // days per level
+
+const STORAGE={
+  progress:"cn-rev-skeleton-progress",custom:"cn-rev-skeleton-custom",
+  volume:"cn-rev-skeleton-volume",overrides:"cn-rev-skeleton-overrides",
+  streak:"cn-rev-skeleton-streak",srs:"cn-rev-skeleton-srs",
+  lifetimeStats:"cn-rev-skeleton-stats",settings:"cn-rev-skeleton-settings"
+};
+
+function getLifetimeStats(){try{return JSON.parse(localStorage.getItem(STORAGE.lifetimeStats)||'{"correct":0,"incorrect":0}')}catch{return{correct:0,incorrect:0}}}
+function saveLifetimeStats(s){localStorage.setItem(STORAGE.lifetimeStats,JSON.stringify(s))}
+function recordCorrect(){const s=getLifetimeStats();s.correct++;saveLifetimeStats(s)}
+function recordIncorrect(){const s=getLifetimeStats();s.incorrect++;saveLifetimeStats(s)}
+function loadSettings(){try{const s=JSON.parse(localStorage.getItem(STORAGE.settings)||'{}');showNewWordCard=s.showNewWordCard!==false;}catch{}}
+function saveSettings(){localStorage.setItem(STORAGE.settings,JSON.stringify({showNewWordCard}))}
+
+function loadStorage(){
+  try{progress=JSON.parse(localStorage.getItem(STORAGE.progress)||"{}")}catch{progress={}}
+  try{customWords=JSON.parse(localStorage.getItem(STORAGE.custom)||"[]")}catch{customWords=[]}
+  try{const v=localStorage.getItem(STORAGE.volume);if(v!==null)volume=parseFloat(v)}catch{}
+  try{wordOverrides=JSON.parse(localStorage.getItem(STORAGE.overrides)||"{}")}catch{wordOverrides={}}
+}
+function saveProgress(){localStorage.setItem(STORAGE.progress,JSON.stringify(progress))}
+function saveCustom(){localStorage.setItem(STORAGE.custom,JSON.stringify(customWords))}
+function saveOverrides(){localStorage.setItem(STORAGE.overrides,JSON.stringify(wordOverrides))}
+
+// ============ SRS ============
+function getSRS(id){
+  try{const d=JSON.parse(localStorage.getItem(STORAGE.srs)||"{}");return d[id]||{level:0,nextReview:0}}catch{return{level:0,nextReview:0}}
+}
+function saveSRS(id,data){
+  try{const d=JSON.parse(localStorage.getItem(STORAGE.srs)||"{}");d[id]=data;localStorage.setItem(STORAGE.srs,JSON.stringify(d))}catch{}
+}
+function resetSRSStorage(){localStorage.setItem(STORAGE.srs,"{}")}
+function isDueForReview(id){const s=getSRS(id);return s.nextReview>0&&s.nextReview<=Date.now()}
+function advanceSRS(id){
+  const s=getSRS(id);const nextLevel=Math.min(s.level+1,SRS_INTERVALS.length-1);
+  const nextReview=Date.now()+(SRS_INTERVALS[nextLevel]*24*60*60*1000);
+  saveSRS(id,{level:nextLevel,nextReview});
+}
+function failSRS(id){saveSRS(id,{level:0,nextReview:Date.now()+(60*60*1000)})} // 1hr
+function getDueWords(){return getAllWords().filter(w=>getStars(w.id)>=9&&isDueForReview(w.id))}
+function getReviewSchedule(id){
+  const s=getSRS(id);const now=Date.now();
+  if(s.nextReview<=now)return"Due now";
+  const diff=s.nextReview-now;const days=Math.ceil(diff/(24*60*60*1000));
+  if(days===1)return"Due tomorrow";return"Due in "+days+" days";
+}
+
+// ============ STREAK ============
+function getStreak(){
+  try{return JSON.parse(localStorage.getItem(STORAGE.streak)||'{"count":0,"lastDate":""}')}catch{return{count:0,lastDate:""}}
+}
+function updateStreak(){
+  const d=new Date();const today=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const s=getStreak();
+  if(s.lastDate===today)return s;
+  const yd=new Date(Date.now()-86400000);const yesterday=yd.getFullYear()+'-'+String(yd.getMonth()+1).padStart(2,'0')+'-'+String(yd.getDate()).padStart(2,'0');
+  const newCount=s.lastDate===yesterday?s.count+1:1;
+  const newS={count:newCount,lastDate:today};
+  localStorage.setItem(STORAGE.streak,JSON.stringify(newS));
+  return newS;
+}
+
+// ============ DIFFICULT WORDS ============
+function getWrongCount(id){return(progress[id]&&progress[id].wrongCount)||0}
+function getDifficultWords(){return getAllWords().filter(w=>getWrongCount(w.id)>=3)}
+
+// ============ AUDIO ============
+let audioCtx=null;
+function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}
+function vs(base){return base*volume}
+function playTone(freq,dur,type,vol,delay){if(volume===0)return;const ctx=getAudioCtx(),t=ctx.currentTime+(delay||0),o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(vs(vol||.15),t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+dur)}
+function playClick(){if(volume===0)return;const ctx=getAudioCtx(),t=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(800,t);o.frequency.exponentialRampToValueAtTime(400,t+.04);g.gain.setValueAtTime(vs(.08),t);g.gain.exponentialRampToValueAtTime(.001,t+.05);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+.06)}
+function playCorrect(){playTone(523,.12,'sine',.15,0);playTone(659,.12,'sine',.15,.08);playTone(784,.2,'sine',.12,.16)}
+function playWrong(){if(volume===0)return;const ctx=getAudioCtx(),t=ctx.currentTime;[180,160].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sawtooth';o.frequency.setValueAtTime(f,t);o.frequency.linearRampToValueAtTime(f-60,t+.25);g.gain.setValueAtTime(vs(i?.06:.08),t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+.35)})}
+function playOneStar(){playTone(587,.15,'sine',.12,0);playTone(880,.3,'triangle',.1,.12)}
+function playThreeStars(){playTone(523,.15,'sine',.13,0);playTone(659,.15,'sine',.13,.1);playTone(784,.15,'sine',.13,.2);playTone(1047,.35,'sine',.12,.3);playTone(1568,.4,'triangle',.05,.35);playTone(2093,.5,'triangle',.03,.4)}
+function playTimerWarn(){playTone(440,.1,'sine',.08,0)}
+function playTimerOut(){playTone(200,.3,'sawtooth',.1,0)}
+
+// ============ SPEECH ============
+function speakTarget(text,pronunciation){if(!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='zh-CN';u.rate=.85;const voices=window.speechSynthesis.getVoices();const zh=voices.find(v=>v.lang.toLowerCase().startsWith('zh'));if(zh)u.voice=zh;window.speechSynthesis.speak(u)}
+function speakCurrent(){if(quizQueue.length===0||quizIdx>=quizQueue.length)return;const w=quizQueue[quizIdx];speakTarget(w.japanese,w.furigana)}
+if('speechSynthesis' in window){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices()}}
+
+// ============ HELPERS ============
+function getAllWords(){return[...VOCAB_DATA,...customWords].map(w=>wordOverrides[w.id]?{...w,english:wordOverrides[w.id]}:w)}
+function getStars(id){return(progress[id]&&progress[id].stars)||0}
+function starsHTML(totalStars){
+  // 0-9 stars across 3 tiers of 3
+  const tier=totalStars<3?0:totalStars<6?1:totalStars<9?2:2;
+  const starsInTier=totalStars%3; // 0,1,2 within tier (9 shows as full tier 2)
+  const filledInTier=totalStars===9?3:starsInTier;
+  const tierCls=['star-1','star-2','star-3'][tier];
+  let h='<span class="stars">';
+  for(let i=0;i<3;i++){
+    h+='<span class="star '+(i<filledInTier?tierCls:'star-empty')+'">'+(i<filledInTier?'★':'☆')+'</span>';
+  }
+  // Show tier indicator dots
+  if(totalStars>=3){
+    const tierDots=['','🟠','💎'][tier];
+    h+='<span style="font-size:10px;margin-left:3px">'+tierDots+'</span>';
+  }
+  return h+'</span>';
+}
+function getTier(totalStars){return totalStars<3?0:totalStars<6?1:2}
+function isMastered(totalStars){return totalStars>=9}
+function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
+function matchAnswer(inp,ans){
+  const clean=s=>s.replace(/[\u00a0\u200b\u200c\u200d\ufeff\u202f\u2009\u2008\u2007\u2006\u2005\u2004\u2003\u2002\u2001]/g,' ').trim().toLowerCase().replace(/\s+/g,' ');
+  const c=clean(inp);
+  return ans.some(a=>clean(a)===c);
+}
+function escapeHTML(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function isCharMode(w){return w.lesson==='hiragana'||w.lesson==='katakana'}
+function getActiveLessons(){const all=getAllWords();const cats=[...new Set(all.map(w=>w.lesson))];return cats.filter(c=>CAT_ORDER.includes(c)).sort((a,b)=>CAT_ORDER.indexOf(a)-CAT_ORDER.indexOf(b))}
+function getActiveWords(){const all=getAllWords();if(selectedLessons.size===0)return all;return all.filter(w=>selectedLessons.has(w.lesson))}
+function today(){return new Date().toISOString().slice(0,10)}
+
+// ============ SCREENS ============
+function lockBody(){document.body.style.position='fixed';document.body.style.width='100%';document.body.style.overflow='hidden'}
+function unlockBody(){document.body.style.position='';document.body.style.width='';document.body.style.overflow=''}
+function showScreen(name){
+  if(name==='quiz')lockBody();else unlockBody();
+  ['menu','quiz','done','add','browse'].forEach(s=>{const el=document.getElementById('screen-'+s);if(el)el.classList.toggle('hidden',s!==name)});
+  if(timerInterval&&name!=='quiz'){clearInterval(timerInterval);timerInterval=null}
+  if(name==='menu')renderMenu();if(name==='add')renderAdd();if(name==='browse'){const bs=document.getElementById('browse-search');if(bs)bs.value='';renderBrowse()}
+}
+
+// ============ MENU ============
+function renderMenu(){
+  const all=getAllWords(),mastered=all.filter(w=>getStars(w.id)>=9).length;
+  const due=getDueWords().length,difficult=getDifficultWords().length;
+  const streak=getStreak();
+
+  // Streak + stats bar
+  document.getElementById('menu-mastered-text').textContent=mastered+'/'+all.length+' mastered';
+  document.getElementById('menu-progress-fill').style.width=(all.length?(mastered/all.length*100):0)+'%';
+  document.getElementById('streak-bar').innerHTML=
+    '<span style="font-size:22px">🔥</span><span style="font-size:15px;font-weight:700;color:#f87171">'+streak.count+' day streak</span>'+
+    (due>0?'<span style="font-size:12px;color:#fbbf24;margin-left:auto">'+due+' due for review</span>':'')+
+    (difficult>0?'<span style="font-size:12px;color:#f87171;margin-left:'+(due>0?'8px':'auto')+'">'+difficult+' difficult</span>':'');
+
+  const cats=getActiveLessons();let grid='';
+  cats.forEach(c=>{const info=LESSONS[c]||{name:c,icon:"📝"};const words=getAllWords().filter(w=>w.lesson===c);const m=words.filter(w=>getStars(w.id)>=3).length;const sel=selectedLessons.has(c)?' selected':'';grid+='<button class="cat-btn'+sel+'" onclick="toggleCat(\''+c+'\')"><div class="cat-icon">'+info.icon+'</div><div class="cat-name">'+info.name+'</div><div class="cat-stat">'+m+'/'+words.length+'</div></button>'});
+  document.getElementById('cat-grid').innerHTML=grid;
+  const activeCount=getActiveWords().length;
+  document.getElementById('start-quiz-btn').textContent='Start Quiz ('+activeCount+' words)';
+}
+function toggleCat(c){playClick();selectedLessons.has(c)?selectedLessons.delete(c):selectedLessons.add(c);renderMenu()}
+function selectAllLessons(){selectedLessons=new Set(getActiveLessons());renderMenu()}
+function selectNoLessons(){selectedLessons=new Set();renderMenu()}
+function resetProgress(){
+  if(!confirm('Reset all progress, SRS schedule, and streak?'))return;
+  progress={};saveProgress();resetSRSStorage();
+  localStorage.setItem(STORAGE.streak,JSON.stringify({count:0,lastDate:""}));
+  renderMenu();
+}
+
+// ============ QUIZ LAUNCH MODAL ============
+function openQuizModal(){
+  playClick();
+  const words=getActiveWords();if(words.length===0){alert('No words selected.');return}
+  const due=getDueWords().filter(w=>selectedLessons.size===0||selectedLessons.has(w.lesson));
+  const difficult=getDifficultWords().filter(w=>selectedLessons.size===0||selectedLessons.has(w.lesson));
+  const overlay=document.createElement('div');overlay.className='edit-overlay';overlay.id='quiz-modal';
+  overlay.innerHTML=`<div class="edit-modal" style="max-width:380px">
+    <h3 style="margin-bottom:16px">Start Quiz</h3>
+    <div class="field-label" style="margin-bottom:6px">Mode</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px">
+      <button class="mode-btn ${quizMode==='normal'?'active':''}" data-mode="normal" onclick="selectMode(this)">🇨🇳 中文 → EN</button>
+      <button class="mode-btn ${quizMode==='reverse'?'active':''}" data-mode="reverse" onclick="selectMode(this)">🇬🇧 EN → 中文</button>
+      <button class="mode-btn ${quizMode==='listen'?'active':''}" data-mode="listen" onclick="selectMode(this)">🔈 Listen</button>
+      <button class="mode-btn ${quizMode==='choice'?'active':''}" data-mode="choice" onclick="selectMode(this)">🔤 Multiple Choice</button>
+    </div>
+    <div class="field-label" style="margin-bottom:6px">Length</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+      <button class="len-btn ${sessionLimit===0?'active':''}" data-len="0" onclick="selectLen(this)">Full (${words.length})</button>
+      <button class="len-btn ${sessionLimit===10?'active':''}" data-len="10" onclick="selectLen(this)">Quick 10</button>
+      <button class="len-btn ${sessionLimit===25?'active':''}" data-len="25" onclick="selectLen(this)">Medium 25</button>
+      <button class="len-btn ${sessionLimit===-3?'active':''}" data-len="-3" onclick="selectLen(this)">♾ Infinite</button>
+      ${due.length>0?'<button class="len-btn '+(sessionLimit===-1?'active':'')+'" data-len="-1" onclick="selectLen(this)">📅 Review ('+due.length+')</button>':''}
+      ${difficult.length>0?'<button class="len-btn '+(sessionLimit===-2?'active':'')+'" data-len="-2" onclick="selectLen(this)">⚠️ Difficult ('+difficult.length+')</button>':''}
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px 12px;background:#0f172a;border-radius:10px">
+      <label style="font-size:13px;color:#9ca3af;display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="timed-toggle" style="width:16px;height:16px;cursor:pointer">
+        <span>⏱ Timed mode (${TIMER_SECS}s per question)</span>
+      </label>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="launchQuiz()">Start</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  if(timedMode){const cb=document.getElementById("timed-toggle");if(cb)cb.checked=true;}
+}
+function selectMode(btn){document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');quizMode=btn.dataset.mode}
+function selectLen(btn){document.querySelectorAll('.len-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');sessionLimit=parseInt(btn.dataset.len)}
+function closeModal(){const m=document.getElementById('quiz-modal');if(m)m.remove()}
+function launchQuiz(){
+  timedMode=document.getElementById('timed-toggle')?.checked||false;
+  closeModal();startQuiz();
+}
+
+// ============ QUIZ ============
+function startQuiz(){
+  let pool;
+  const activeWords=getActiveWords();
+  if(sessionLimit===-1){pool=getDueWords().filter(w=>selectedLessons.size===0||selectedLessons.has(w.lesson));if(pool.length===0){alert('No words due for review in selected categories.');return}}
+  else if(sessionLimit===-2){pool=getDifficultWords().filter(w=>selectedLessons.size===0||selectedLessons.has(w.lesson));if(pool.length===0){alert('No difficult words yet. Words appear here after 3+ wrong answers.');return}}
+  else{const needWork=activeWords.filter(w=>getStars(w.id)<9);pool=needWork.length>0?needWork:activeWords}
+
+  // Sort: unseen first, then fewer stars, shuffle within groups
+  const grouped={};
+  pool.forEach(w=>{
+    const s=getStars(w.id);
+    const key=s===0&&getWrongCount(w.id)===0?'new':String(s);
+    if(!grouped[key])grouped[key]=[];
+    grouped[key].push(w);
+  });
+  const order=['new','0','1','2'];
+  const sorted=[];
+  order.forEach(k=>{if(grouped[k])sorted.push(...shuffle(grouped[k]))});
+
+  // Apply session limit (for finite modes, limit the initial pool)
+  const initialPool=(sessionLimit>0)?sorted.slice(0,sessionLimit):
+                    (sessionLimit===-3)?shuffle([...sorted]):sorted;
+
+  // Reset session state
+  sessionBuckets={};
+  initialPool.forEach(w=>{sessionBuckets[w.id]={bucket:0,lastSeen:-99}});
+
+  // Build initial queue - just the pool in order, re-queuing happens dynamically
+  quizQueue=[...initialPool];
+  quizIdx=0;quizAnswered=0;quizCorrect=0;quizFeedback=null;quizShowHint=false;quizLastInput="";currentStreak=0;
+  _previewedThisSession.clear();
+  updateStreak();
+  showScreen('quiz');renderQuiz();
+}
+
+// Insert a word back into the queue after the appropriate gap for its bucket level
+function requeueWord(w){
+  const b=sessionBuckets[w.id];
+  if(!b)return;
+  const gap=SESSION_GAPS[Math.min(b.bucket,SESSION_GAPS.length-1)];
+  // Add some randomness: insert at gap ± 30%
+  const jitter=Math.floor(gap*0.3);
+  const insertAfter=gap+Math.floor(Math.random()*jitter*2)-jitter;
+  const insertAt=Math.min(quizIdx+1+Math.max(1,insertAfter),quizQueue.length);
+  quizQueue.splice(insertAt,0,w);
+  b.lastSeen=quizIdx;
+}
+
+function startTimer(){
+  if(!timedMode)return;
+  timerLeft=TIMER_SECS;
+  renderTimerBar();
+  if(timerInterval)clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{
+    timerLeft--;
+    renderTimerBar();
+    if(timerLeft<=3)playTimerWarn();
+    if(timerLeft<=0){clearInterval(timerInterval);timerInterval=null;timeUp()}
+  },1000);
+}
+
+function timeUp(){
+  const w=quizQueue[quizIdx];
+  quizLastInput="(time up)";quizAnswered++;
+  quizFeedback='wrong';playTimerOut();currentStreak=0;recordIncorrect();
+  const sb=sessionBuckets[w.id]||(sessionBuckets[w.id]={bucket:0,lastSeen:-99});
+  sb.bucket=0;
+  requeueWord(w);
+  const tuTier=Math.floor(getStars(w.id)/3)*3;progress[w.id]={stars:tuTier,wrongCount:(getWrongCount(w.id)+1)};saveProgress();
+  failSRS(w.id);
+  speakTarget(w.japanese,w.furigana);renderQuiz();
+}
+
+function renderTimerBar(){
+  const bar=document.getElementById('timer-bar');if(!bar)return;
+  const pct=(timerLeft/TIMER_SECS)*100;
+  const col=timerLeft<=3?'#ef4444':timerLeft<=6?'#fbbf24':'#34d399';
+  bar.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:13px;color:${col};font-weight:700">⏱ ${timerLeft}s</span><div style="flex:1;height:4px;background:#1f2937;border-radius:999px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${col};border-radius:999px;transition:width .9s linear"></div></div></div>`;
+}
+
+function buildChoices(correct){
+  const all=getAllWords();
+  const pool=correct.lesson==='custom'
+    ? all.filter(w=>w.id!==correct.id&&!isCharMode(w))
+    : all.filter(w=>w.id!==correct.id&&w.lesson===correct.lesson);
+  const wrong=shuffle(pool).slice(0,3);
+  // If not enough in category, pad with random from anywhere
+  if(wrong.length<3){
+    const extras=shuffle(all.filter(w=>w.id!==correct.id&&!wrong.find(x=>x.id===w.id)&&!isCharMode(w))).slice(0,3-wrong.length);
+    wrong.push(...extras);
+  }
+  return shuffle([correct,...wrong]);
+}
+
+const _justPreviewed=new Set();
+const _previewedThisSession=new Set();
+
+function ensureCardInner(){
+  const card=document.getElementById('quiz-card');
+  if(!card||card.querySelector('#quiz-stars-area'))return;
+  card.innerHTML='<div id="quiz-stars-area" style="margin-bottom:2px"></div><span class="quiz-cat" id="quiz-cat"></span><div class="quiz-hint-area" id="quiz-hint-area"></div><div class="quiz-japanese" id="quiz-japanese"></div><div id="romaji-hint"></div><button class="speak-btn" id="quiz-speak-btn" onclick="speakCurrent()" title="Listen">🔈</button><div id="quiz-hint-btn-area"></div><div id="quiz-feedback-area"></div><div id="quiz-input-area" style="margin-top:8px"></div>';
+}
+
+function renderPreview(w){
+  ensureCardInner();
+  const catInfo=LESSONS[w.lesson]||{name:w.lesson,icon:""};
+  const card=document.getElementById('quiz-card');
+  card.className='quiz-card';
+  document.getElementById('quiz-stars-area').innerHTML=starsHTML(0);
+  document.getElementById('quiz-cat').textContent=catInfo.icon+' '+catInfo.name+' · New word';
+  document.getElementById('quiz-hint-area').innerHTML=w.furigana?'<span class="quiz-furigana">'+w.furigana+'</span>':'';
+  const jpEl=document.getElementById('quiz-japanese');
+  jpEl.textContent=w.japanese;
+  jpEl.className='quiz-japanese'+(isCharMode(w)?' char-mode':'');
+  const romajiDiv=document.getElementById('romaji-hint');
+  if(romajiDiv)romajiDiv.textContent='';
+  const speakBtn=document.getElementById('quiz-speak-btn');
+  if(speakBtn){speakBtn.style.display='';speakBtn.onclick=()=>speakTarget(w.japanese,w.furigana)}
+  document.getElementById('quiz-hint-btn-area').innerHTML='';
+  const streakTxt=currentStreak>=3?'  🔥'+currentStreak:'';document.getElementById('quiz-stats').textContent=quizAnswered+' answered · '+quizCorrect+' correct'+streakTxt;
+  document.getElementById('quiz-progress-fill').style.width=(quizQueue.length?Math.min((quizIdx/quizQueue.length)*100,100):0)+'%';
+  // Show the English meaning prominently
+  const exHTML=w.example?'<div style="color:#93c5fd;font-size:13px;margin-top:10px;padding:6px 10px;background:rgba(59,130,246,0.08);border-radius:8px;border:1px solid rgba(59,130,246,0.15)">💡 '+escapeHTML(w.example)+'</div>':'';
+  document.getElementById('quiz-feedback-area').innerHTML=
+    '<div style="margin-top:4px;padding:10px 14px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:10px">' +
+    '<div style="font-size:11px;color:#fbbf24;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">New word</div>' +
+    '<div style="font-size:20px;font-weight:600;color:#f3f4f6">'+escapeHTML(w.english.join(' / '))+'</div>'+
+    '</div>'+exHTML;
+  document.getElementById('quiz-input-area').innerHTML=
+    '<button class="btn btn-primary btn-full" onclick="gotIt()" style="padding:14px">Got it →</button>';
+  _previewShownAt=Date.now();
+  setTimeout(()=>speakTarget(w.japanese,w.furigana),200);
+}
+
+function gotIt(){
+  playClick();
+  _previewShownAt=0;
+  _justPreviewed.add(quizQueue[quizIdx].id);
+  renderQuiz();
+}
+
+function renderQuiz(){
+  if(quizIdx>=quizQueue.length&&sessionLimit!==-3){showDone();return}
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null}
+  const w=quizQueue[quizIdx];
+
+  // Show preview card for brand new words (0 stars, never attempted)
+  // Preview check: show for truly unseen words
+  const _hasProgress=w.id in progress;
+  const _alreadyPreviewed=_previewedThisSession.has(w.id);
+  const _neverAnswered=!_hasProgress||(progress[w.id]&&progress[w.id].stars===0&&(progress[w.id].wrongCount||0)===0);
+  if(showNewWordCard&&!quizFeedback&&!_hasProgress&&!_alreadyPreviewed){
+    _previewedThisSession.add(w.id);
+    renderPreview(w);
+    return;
+  }
+  ensureCardInner();
+  const stars=getStars(w.id);
+  const modeLabel={normal:"🇨🇳 中文 → EN",reverse:"🇬🇧 EN → 中文",listen:"🔈 Listen",choice:"🔤 Multiple Choice"}[quizMode];
+  const streakTxt=currentStreak>=3?'  🔥'+currentStreak:'';document.getElementById('quiz-stats').textContent=quizAnswered+' answered · '+quizCorrect+' correct'+streakTxt;
+  document.getElementById('quiz-progress-fill').style.width=(quizQueue.length?Math.min((quizIdx/quizQueue.length)*100,100):0)+'%';
+  const card=document.getElementById('quiz-card');
+  const newStars=getStars(w.id);
+  const cardClass=quizFeedback==='correct'?(newStars>=9?' mastered':(newStars===3||newStars===6)?' tier-up':' correct'):quizFeedback==='wrong'?' wrong':'';
+  card.className='quiz-card'+cardClass;
+
+  // Stars + SRS info + session bucket progress
+  const sb=sessionBuckets[w.id];
+  const sessionDots=sb?Array.from({length:SESSION_GAPS.length},(_,i)=>'<span style="font-size:10px;color:'+(i<sb.bucket?'#34d399':'#374151')+'">●</span>').join(''):'';
+  const srsInfo=getStars(w.id)>=9?'<span style="font-size:10px;color:#6b7280;margin-left:6px">'+getReviewSchedule(w.id)+'</span>':'';
+  const sessionInfo=sb&&sb.bucket<SESSION_GAPS.length?'<span style="margin-left:8px;font-size:10px;color:#6b7280">session: '+sessionDots+'</span>':'';
+  document.getElementById('quiz-stars-area').innerHTML=starsHTML(stars)+srsInfo+sessionInfo;
+
+  const catInfo=LESSONS[w.lesson]||{name:w.lesson,icon:""};
+  document.getElementById('quiz-cat').textContent=catInfo.icon+' '+catInfo.name+' · '+modeLabel;
+
+  // Pinyin/pronunciation
+  document.getElementById('quiz-hint-area').innerHTML=((quizShowHint||quizFeedback)&&w.furigana)?'<span class="quiz-furigana">'+w.furigana+'</span>':'';
+
+  const jpEl=document.getElementById('quiz-japanese');
+  const speakBtn=document.getElementById('quiz-speak-btn');
+
+  if(quizMode==='reverse'){
+    // Show English, type Chinese
+    jpEl.textContent=w.english[0];jpEl.className='quiz-japanese';
+    if(speakBtn){speakBtn.style.display='none';speakBtn.onclick=speakCurrent;}
+    const rd1=document.getElementById('romaji-hint');if(rd1)rd1.textContent='';
+  } else if(quizMode==='listen'){
+    jpEl.textContent='🔈';jpEl.className='quiz-japanese';
+    // Show speaker button for replay, but wire it to replay
+    if(speakBtn){speakBtn.style.display='';speakBtn.onclick=()=>speakTarget(w.japanese,w.furigana)}
+    const rd2=document.getElementById('romaji-hint');
+    if(rd2){
+      if(quizShowHint&&!quizFeedback){rd2.textContent=(w.furigana||w.japanese);rd2.className='romaji-hint';rd2.style.fontFamily="'Noto Sans SC',sans-serif";rd2.style.fontSize='20px'}
+      else{rd2.textContent='';rd2.className='romaji-hint';rd2.style.fontFamily='';rd2.style.fontSize=''}
+    }
+    if(!quizFeedback&&!quizShowHint)setTimeout(()=>speakTarget(w.japanese,w.furigana),200);
+  } else {
+    jpEl.textContent=w.japanese;jpEl.className='quiz-japanese'+(isCharMode(w)?' char-mode':'');
+    if(speakBtn){speakBtn.style.display='';speakBtn.onclick=speakCurrent;}
+    // Optional pronunciation hint for character-drill categories
+    const romajiDiv=document.getElementById('romaji-hint');
+    if(romajiDiv){
+      if(isCharMode(w)&&quizShowHint&&!quizFeedback){romajiDiv.textContent='reads as: '+w.english[0];romajiDiv.className='romaji-hint'}
+      else{romajiDiv.textContent='';romajiDiv.className='romaji-hint'}
+    }
+  }
+
+  const hintBtnArea=document.getElementById('quiz-hint-btn-area');
+  if((w.furigana||isCharMode(w)||quizMode==='listen')&&!quizShowHint&&!quizFeedback&&quizMode!=='reverse')hintBtnArea.innerHTML='<button class="hint-btn" onclick="showQuizHint()">Show Reading</button>';
+  else if(!quizFeedback)hintBtnArea.innerHTML='<div class="spacer-hint"></div>';else hintBtnArea.innerHTML='';
+
+  const fbArea=document.getElementById('quiz-feedback-area');
+  const exHTML=w.example?'<div style="color:#93c5fd;font-size:13px;margin-top:8px;padding:6px 10px;background:rgba(59,130,246,0.08);border-radius:8px;border:1px solid rgba(59,130,246,0.15)">💡 '+escapeHTML(w.example)+'</div>':'';
+  const wrongSuffix=getWrongCount(w.id)>0?'<div style="color:#6b7280;font-size:11px;margin-top:4px">Wrong '+getWrongCount(w.id)+' time'+(getWrongCount(w.id)>1?'s':'')+' total</div>':'';
+  if(quizFeedback==='correct'){
+    const ns=getStars(w.id);
+    const isMast=ns>=9,isTierUp=ns===3||ns===6;
+    let h=isMast
+      ?'<div class="feedback-correct" style="color:#22d3ee">Mastered! 💎</div>'
+      :isTierUp
+        ?'<div class="feedback-correct" style="color:'+(ns===6?'#f97316':'#fbbf24')+'">Tier Up! '+(ns===6?'🟠':'⭐')+'</div>'
+        :'<div class="feedback-correct">Correct! ✓</div>';
+    if(w.english.length>1)h+='<div class="feedback-answers">All answers: '+w.english.join(', ')+'</div>';
+    if(quizMode==='reverse')h+='<div class="feedback-answers" style="font-family:\'Noto Sans SC\',sans-serif">'+escapeHTML(w.japanese)+(w.furigana?' ('+w.furigana+')':'')+'</div>';
+    h+=exHTML;fbArea.innerHTML=h}
+  else if(quizFeedback==='wrong'){let h='<div class="feedback-wrong">Incorrect ✗</div><div class="feedback-answers">Accepted: <span class="highlight">'+w.english.join(', ')+'</span></div>';if(quizMode==='reverse')h+='<div class="feedback-answers" style="font-family:\'Noto Sans SC\',sans-serif">'+escapeHTML(w.japanese)+(w.furigana?' ('+w.furigana+')':'')+'</div>';h+='<div class="feedback-typed">You typed: '+escapeHTML(quizLastInput)+'</div>'+wrongSuffix+exHTML;fbArea.innerHTML=h}
+  else fbArea.innerHTML='';
+
+  // Timer bar
+  const timerBar=document.getElementById('timer-bar');if(timerBar)timerBar.innerHTML='';
+
+  const inputArea=document.getElementById('quiz-input-area');
+  if(!quizFeedback){
+    if(quizMode==='choice'){
+      // Multiple choice
+      const choices=buildChoices(w);
+      let choiceHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+      choices.forEach(c=>{choiceHTML+='<button class="choice-btn" onclick="submitChoice(\''+c.id+'\',\''+w.id+'\')">'+escapeHTML(c.english[0])+'</button>'});
+      choiceHTML+='</div>';inputArea.innerHTML=choiceHTML;
+    } else {
+      const ph=isCharMode(w)?'Type the pronunciation...':quizMode==='reverse'?'Type the Chinese...':'Type the English meaning...';
+      inputArea.innerHTML='<div id="timer-bar"></div><div class="input-row"><input class="input" id="quiz-input" placeholder="'+ph+'" autocomplete="off" autocapitalize="off" onkeydown="quizKeydown(event)"><button class="btn btn-primary" onclick="submitQuiz()">Go</button></div>';
+      {const el=document.getElementById('quiz-input');if(el)el.focus();}
+      if(timedMode)startTimer();
+    }
+  } else {
+    inputArea.innerHTML='<button class="btn btn-secondary btn-full" onclick="nextQuiz()" style="padding:14px">Next →</button>';
+  }
+}
+
+function submitChoice(chosenId,correctId){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null}
+  const w=quizQueue[quizIdx];
+  quizLastInput=getAllWords().find(x=>x.id===chosenId)?.english[0]||'';
+  quizAnswered++;
+  const isCorrect=chosenId===correctId;
+  if(isCorrect){
+    quizCorrect++;quizFeedback='correct';_feedbackShownAt=Date.now();currentStreak++;recordCorrect();
+    const wc=getWrongCount(w.id);
+    const justPrev=_justPreviewed.has(w.id);
+    if(justPrev)_justPreviewed.delete(w.id);
+    const sb=sessionBuckets[w.id]||(sessionBuckets[w.id]={bucket:0,lastSeen:-99});
+    if(!justPrev)sb.bucket=Math.min(sb.bucket+1,SESSION_GAPS.length);
+    if(sb.bucket<SESSION_GAPS.length){requeueWord(w)}
+    if(!justPrev&&sb.bucket>=SESSION_GAPS.length){
+      const ns=Math.min(9,getStars(w.id)+1);
+      progress[w.id]={stars:ns,wrongCount:wc};saveProgress();
+      if(ns===9){advanceSRS(w.id);playThreeStars()}
+      else if(ns===3||ns===6){playThreeStars()}
+      else if(ns===1)playOneStar();
+      else playCorrect();
+    } else {
+      progress[w.id]={stars:getStars(w.id),wrongCount:wc};saveProgress();
+      playCorrect();
+    }
+    if(sessionLimit===-3&&sb.bucket>=SESSION_GAPS.length){sb.bucket=0;quizQueue.push(w)}
+  } else {
+    quizFeedback='wrong';_feedbackShownAt=Date.now();playWrong();currentStreak=0;recordIncorrect();
+    _justPreviewed.delete(w.id);
+    const sb=sessionBuckets[w.id]||(sessionBuckets[w.id]={bucket:0,lastSeen:-99});
+    sb.bucket=0;
+    requeueWord(w);
+    const curTier2=Math.floor(getStars(w.id)/3)*3;
+    progress[w.id]={stars:curTier2,wrongCount:getWrongCount(w.id)+1};saveProgress();
+    failSRS(w.id);
+  }
+  // Highlight chosen button
+  document.querySelectorAll('.choice-btn').forEach(b=>{
+    const chosen=b.textContent.trim()===quizLastInput.trim();
+    const correct=b.textContent.trim()===w.english[0].trim();
+    if(correct)b.style.background='rgba(16,185,129,0.3)';
+    else if(chosen&&!isCorrect)b.style.background='rgba(239,68,68,0.3)';
+    b.disabled=true;
+  });
+  setTimeout(()=>{if(!document.getElementById("screen-quiz").classList.contains("hidden")){speakTarget(w.japanese,w.furigana);renderQuiz()}},800);
+}
+
+function submitQuiz(){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null}
+  const el=document.getElementById('quiz-input');if(!el)return;const val=el.value;if(!val.trim())return;
+  quizLastInput=val;quizAnswered++;const w=quizQueue[quizIdx];
+  const isCorrect=quizMode==='reverse'
+    ?matchAnswer(val,[w.japanese,w.furigana].filter(Boolean))
+    :matchAnswer(val,w.english);
+  if(isCorrect){
+    quizCorrect++;quizFeedback='correct';_feedbackShownAt=Date.now();currentStreak++;recordCorrect();
+    const wc=getWrongCount(w.id);
+    const justPrev=_justPreviewed.has(w.id);
+    if(justPrev)_justPreviewed.delete(w.id);
+    // Advance session bucket
+    const sb=sessionBuckets[w.id]||(sessionBuckets[w.id]={bucket:0,lastSeen:-99});
+    if(!justPrev)sb.bucket=Math.min(sb.bucket+1,SESSION_GAPS.length);
+    // If not yet graduated (bucket < SESSION_GAPS.length), re-queue
+    if(sb.bucket<SESSION_GAPS.length){
+      requeueWord(w);
+    }
+    // Award stars only when graduated from session (bucket reaches SESSION_GAPS.length) and not just-previewed
+    if(!justPrev&&sb.bucket>=SESSION_GAPS.length){
+      const ns=Math.min(9,getStars(w.id)+1);
+      progress[w.id]={stars:ns,wrongCount:wc};saveProgress();
+      if(ns===9){advanceSRS(w.id);playThreeStars()}
+      else if(ns===3||ns===6){playThreeStars()} // tier upgrade
+      else if(ns===1)playOneStar();
+      else playCorrect();
+    } else {
+      progress[w.id]={stars:getStars(w.id),wrongCount:wc};saveProgress();
+      playCorrect();
+    }
+    // Infinite mode: when graduated a tier, reset bucket to cycle again
+    if(sessionLimit===-3&&sb.bucket>=SESSION_GAPS.length){
+      sb.bucket=0;
+      quizQueue.push(w);
+    }
+  } else {
+    quizFeedback='wrong';_feedbackShownAt=Date.now();playWrong();currentStreak=0;recordIncorrect();
+    _justPreviewed.delete(w.id);
+    // Reset session bucket to 0 on wrong
+    const sb=sessionBuckets[w.id]||(sessionBuckets[w.id]={bucket:0,lastSeen:-99});
+    sb.bucket=0;
+    requeueWord(w);
+    // On wrong, drop back to start of current tier
+    const curTier=Math.floor(getStars(w.id)/3)*3;
+    progress[w.id]={stars:curTier,wrongCount:getWrongCount(w.id)+1};saveProgress();
+    failSRS(w.id);
+  }
+  speakTarget(w.japanese,w.furigana);renderQuiz();
+}
+function showQuizInfo(){
+  const overlay=document.createElement('div');overlay.className='edit-overlay';
+  overlay.innerHTML=`<div class="edit-modal" style="max-width:360px">
+    <h3 style="margin-bottom:16px">How scoring works</h3>
+    <div style="display:flex;flex-direction:column;gap:12px;font-size:13px;color:#9ca3af;line-height:1.6">
+      <div>
+        <div style="font-weight:600;color:#f3f4f6;margin-bottom:2px">Session dots ●●●</div>
+        Track how many times you've got a word right <em>this session</em>. Get it right 3 times (spaced apart) to earn a star. Get it wrong and the dots reset.
+      </div>
+      <div>
+        <div style="font-weight:600;color:#fbbf24;margin-bottom:2px">⭐ Yellow stars (1–3)</div>
+        You're getting familiar with the word. Each star requires 3 correct in-session answers.
+      </div>
+      <div>
+        <div style="font-weight:600;color:#f97316;margin-bottom:2px">🟠 Orange stars (4–6)</div>
+        Building confidence. Word has been correctly recalled across multiple sessions.
+      </div>
+      <div>
+        <div style="font-weight:600;color:#22d3ee;margin-bottom:2px">💎 Teal stars (7–9)</div>
+        Fully mastered. Spaced repetition takes over — the word will be scheduled for review at growing intervals (1, 3, 7, 14, 30, 90 days).
+      </div>
+      <div>
+        <div style="font-weight:600;color:#f3f4f6;margin-bottom:2px">Getting it wrong</div>
+        Session dots reset. Stars drop back to the start of your current tier, not all the way to zero.
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <button class="btn btn-secondary btn-full" onclick="this.closest('.edit-overlay').remove()">Got it</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});
+}
+function showQuizHint(){
+  playClick();
+  const el=document.getElementById('quiz-input');
+  const saved=el?el.value:'';
+  quizShowHint=true;
+  renderQuiz();
+  const restored=document.getElementById('quiz-input');
+  if(restored&&saved){restored.value=saved;restored.selectionStart=saved.length;restored.selectionEnd=saved.length;}
+}
+function nextQuiz(){
+  playClick();
+  quizFeedback=null;quizShowHint=false;quizLastInput="";quizIdx++;renderQuiz();
+}
+function quizKeydown(e){if(e.key==='Enter'){if(quizFeedback)nextQuiz();else submitQuiz()}}
+
+let _feedbackShownAt=0;
+let _previewShownAt=0;
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter')return;
+  const screen=document.getElementById('screen-quiz');
+  if(!screen||screen.classList.contains('hidden'))return;
+  // Advance from feedback screen
+  if(quizFeedback&&Date.now()-_feedbackShownAt>300){nextQuiz();return;}
+  // Advance from preview screen
+  if(!quizFeedback&&_previewShownAt>0&&Date.now()-_previewShownAt>300){_previewShownAt=0;gotIt();return;}
+});
+function showDone(){
+  const streak=getStreak();
+  document.getElementById('done-stat').textContent=quizCorrect+'/'+quizAnswered+' correct';
+  document.getElementById('done-pct').textContent=(quizAnswered>0?Math.round((quizCorrect/quizAnswered)*100)+'% accuracy':'')+'  🔥 '+streak.count+' day streak';
+  showScreen('done');
+}
+
+// ============ ADD ============
+function renderAdd(){document.getElementById('add-japanese').value='';document.getElementById('add-furigana').value='';document.getElementById('add-english').value='';document.getElementById('add-msg').classList.add('hidden');renderCustomList()}
+function addWord(){
+  playClick();const jp=document.getElementById('add-japanese').value.trim(),fu=document.getElementById('add-furigana').value.trim(),en=document.getElementById('add-english').value;
+  const msgEl=document.getElementById('add-msg');
+  if(!jp||!en.trim()){msgEl.textContent='Chinese and English fields are required.';msgEl.className='add-msg error';msgEl.classList.remove('hidden');return}
+  const answers=en.split(';').map(a=>a.trim()).filter(Boolean);
+  if(answers.length===0){msgEl.textContent='Enter at least one English meaning.';msgEl.className='add-msg error';msgEl.classList.remove('hidden');return}
+  const all=getAllWords();
+  const dupe=all.find(w=>w.japanese===jp||(fu&&w.furigana&&w.furigana===fu)||(jp&&w.furigana===jp));
+  if(dupe&&!window._skipDupeCheck){const catName=(LESSONS[dupe.lesson]||{name:dupe.lesson}).name;msgEl.innerHTML='Duplicate found in <b>'+catName+'</b>: '+escapeHTML(dupe.english.join(', '))+'<br><button class="btn btn-sm btn-primary" style="margin-top:6px" onclick="window._skipDupeCheck=true;addWord()">Add Anyway</button>';msgEl.className='add-msg error';msgEl.classList.remove('hidden');return}
+  window._skipDupeCheck=false;
+  customWords.push({id:'custom-'+Date.now()+'-'+Math.random().toString(36).slice(2,6),lesson:'custom',japanese:jp,furigana:fu,english:answers});
+  saveCustom();document.getElementById('add-japanese').value='';document.getElementById('add-furigana').value='';document.getElementById('add-english').value='';
+  msgEl.textContent='Added "'+jp+'"';msgEl.className='add-msg success';msgEl.classList.remove('hidden');setTimeout(()=>msgEl.classList.add('hidden'),2000);
+  renderCustomList();document.getElementById('add-japanese').focus();
+}
+function deleteCustomWord(id){customWords=customWords.filter(w=>w.id!==id);saveCustom();renderCustomList()}
+function renderCustomList(){
+  const section=document.getElementById('custom-list-section'),list=document.getElementById('custom-list'),label=document.getElementById('custom-list-label');
+  if(customWords.length===0){section.classList.add('hidden');return}
+  section.classList.remove('hidden');label.textContent='Your Custom Words ('+customWords.length+')';
+  let h='';customWords.forEach(w=>{h+='<div class="custom-item"><div class="custom-item-text"><span class="jp">'+escapeHTML(w.japanese)+'</span>'+(w.furigana?'<span class="furi">('+escapeHTML(w.furigana)+')</span>':'')+'<span class="en">= '+escapeHTML(w.english.join('; '))+'</span></div><button class="delete-btn" onclick="deleteCustomWord(\''+w.id+'\')">\u2715</button></div>'});
+  list.innerHTML=h;
+}
+
+// ============ BROWSE ============
+function renderBrowse(){
+  const all=getAllWords(),mc=all.filter(w=>getStars(w.id)>=9).length,rc=all.length-mc,dc=getDifficultWords().length;
+  document.getElementById('browse-filters').innerHTML=[
+    {key:'all',label:'All ('+all.length+')'},
+    {key:'unmastered',label:'Remaining ('+rc+')'},
+    {key:'mastered',label:'Mastered ('+mc+')'},
+    {key:'due',label:'📅 Due ('+getDueWords().length+')'},
+    {key:'difficult',label:'⚠️ Difficult ('+dc+')'},
+  ].map(f=>'<button class="filter-btn'+(browseFilter===f.key?' active':'')+'" onclick="setBrowseFilter(\''+f.key+'\')">'+f.label+'</button>').join('');
+  const filtered=all.filter(w=>{
+    if(browseFilter==='mastered')return getStars(w.id)>=9;
+    if(browseFilter==='unmastered')return getStars(w.id)<9;
+    if(browseFilter==='due')return getStars(w.id)>=9&&isDueForReview(w.id);
+    if(browseFilter==='difficult')return getWrongCount(w.id)>=3;
+    return true;
+  });
+  const searchEl=document.getElementById('browse-search');
+  const sq=(searchEl?searchEl.value:'').trim().toLowerCase();
+  const searched=sq?filtered.filter(w=>w.japanese.toLowerCase().includes(sq)||(w.furigana&&w.furigana.toLowerCase().includes(sq))||w.english.some(e=>e.toLowerCase().includes(sq))):filtered;
+  const grouped={};searched.forEach(w=>{if(!grouped[w.lesson])grouped[w.lesson]=[];grouped[w.lesson].push(w)});
+  const activeCats=CAT_ORDER.filter(c=>grouped[c]);
+  let nav='';activeCats.forEach(c=>{const info=LESSONS[c]||{name:c,icon:""};nav+='<button class="cat-nav-btn" onclick="document.getElementById(\'browse-cat-'+c+'\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">'+info.icon+' '+info.name+'</button>'});
+  document.getElementById('cat-nav').innerHTML=nav;
+  let html=sq?'<div style="font-size:12px;color:#6b7280;margin-bottom:8px">'+searched.length+' result'+(searched.length!==1?'s':'')+'</div>':'';
+  activeCats.forEach(l=>{
+    const info=LESSONS[l]||{name:l,icon:""};
+    html+='<div class="browse-group-label" id="browse-cat-'+l+'">'+info.icon+' '+info.name+'</div>';
+    grouped[l].forEach(w=>{
+      const isEdited=!!wordOverrides[w.id];const furi=w.furigana?escapeHTML(w.furigana).replace(/'/g,"\\'"):'';
+      const wc=getWrongCount(w.id);const srs=getStars(w.id)>=9?'<span style="color:#6b7280;font-size:10px;margin-left:4px">'+getReviewSchedule(w.id)+'</span>':'';
+      const diffTag=wc>=3?'<span style="color:#f87171;font-size:10px;margin-left:4px" title="Wrong '+wc+' times">⚠️</span>':'';
+      html+='<div class="browse-item"><div style="flex:1;min-width:0"><span class="jp">'+escapeHTML(w.japanese)+'</span>'+(w.furigana?'<span class="furi">('+escapeHTML(w.furigana)+')</span>':'')+'<span class="en">'+escapeHTML(w.english.join(', '))+'</span>'+(w.example?'<span style="color:#93c5fd;font-size:10px;margin-left:4px" title="'+escapeHTML(w.example)+'">💡</span>':'')+(isEdited?'<span style="color:#fbbf24;font-size:10px;margin-left:4px" title="Edited">✎</span>':'')+diffTag+srs+'</div><button class="speak-btn-sm" onclick="speakTarget(\''+escapeHTML(w.japanese).replace(/'/g,"\\'")+'\',\''+furi+'\')" title="Listen">🔈</button><button class="edit-btn" onclick="editWord(\''+w.id+'\')" title="Edit">✎</button>'+starsHTML(getStars(w.id))+'</div>'});
+  });
+  document.getElementById('browse-list').innerHTML=html;
+}
+function setBrowseFilter(f){browseFilter=f;renderBrowse()}
+function editWord(id){
+  const allRaw=[...VOCAB_DATA,...customWords],original=allRaw.find(w=>w.id===id);if(!original)return;
+  const current=wordOverrides[id]||original.english;
+  const overlay=document.createElement('div');overlay.className='edit-overlay';
+  overlay.innerHTML='<div class="edit-modal"><h3>Edit Answers</h3><div class="edit-jp">'+escapeHTML(original.japanese)+(original.furigana?' ('+escapeHTML(original.furigana)+')':'')+'</div><div class="field-label">Answers (semicolon-separated)</div><input class="input" id="edit-english-input" value="'+escapeHTML(current.join('; '))+'"><div class="edit-actions"><button class="btn btn-secondary" id="edit-cancel-btn">Cancel</button>'+(wordOverrides[id]?'<button class="btn btn-ghost" id="edit-reset-btn" style="color:#fbbf24">Reset</button>':'')+'<button class="btn btn-primary" id="edit-save-btn">Save</button></div></div>';
+  document.body.appendChild(overlay);
+  const inp=document.getElementById('edit-english-input');inp.focus();inp.selectionStart=inp.value.length;
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeEdit()});
+  document.getElementById('edit-cancel-btn').addEventListener('click',closeEdit);
+  document.getElementById('edit-save-btn').addEventListener('click',()=>{const answers=inp.value.split(';').map(a=>a.trim()).filter(Boolean);if(!answers.length){alert('Enter at least one answer.');return}wordOverrides[id]=answers;saveOverrides();closeEdit();renderBrowse()});
+  const rb=document.getElementById('edit-reset-btn');if(rb)rb.addEventListener('click',()=>{delete wordOverrides[id];saveOverrides();closeEdit();renderBrowse()});
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('edit-save-btn').click();if(e.key==='Escape')closeEdit()});
+  function closeEdit(){if(overlay.parentNode)overlay.parentNode.removeChild(overlay)}
+}
+
+// ============ EXPORT/IMPORT ============
+function exportData(){playClick();const data={progress,customWords,overrides:wordOverrides};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;const d=new Date();const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');a.download='chinese-revision-'+ds+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}
+function importData(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{try{const data=JSON.parse(e.target.result);if(data.customWords&&Array.isArray(data.customWords)){customWords=data.customWords;saveCustom()}if(data.progress&&typeof data.progress==='object'){progress=data.progress;saveProgress()}if(data.overrides&&typeof data.overrides==='object'){wordOverrides=data.overrides;saveOverrides()}renderMenu();alert('Imported successfully.')}catch{alert('Invalid file.')}event.target.value=''};reader.readAsText(file)}
+
+// ============ VOLUME ============
+function openSettings(){
+  const overlay=document.createElement('div');overlay.className='edit-overlay';
+  overlay.innerHTML=`<div class="edit-modal" style="max-width:360px">
+    <h3 style="margin-bottom:16px">⚙️ Settings</h3>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <label style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:14px;color:#d1d5db">
+        <div>
+          <div style="font-weight:600">Show new word card</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:2px">Preview meaning before quizzing on new words</div>
+        </div>
+        <input type="checkbox" id="setting-newcard" style="width:18px;height:18px;cursor:pointer;margin-left:12px" ${showNewWordCard?'checked':''}>
+      </label>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#d1d5db;margin-bottom:8px">Volume</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span id="settings-vol-icon" onclick="toggleMute();updateSettingsVolIcon()" style="cursor:pointer;font-size:18px">🔊</span>
+          <input type="range" min="0" max="100" id="settings-volume-slider" class="volume-slider" style="flex:1" oninput="setVolume(this.value);updateSettingsVolIcon()" value="${Math.round(volume*100)}">
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:20px">
+      <button class="btn btn-primary btn-full" onclick="saveSettingsModal()">Save</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay){saveSettingsModal();overlay.remove()}});
+  updateSettingsVolIcon();
+}
+
+function updateSettingsVolIcon(){
+  const i=document.getElementById('settings-vol-icon');if(!i)return;
+  if(volume===0)i.textContent='🔇';else if(volume<.4)i.textContent='🔈';else if(volume<.75)i.textContent='🔉';else i.textContent='🔊';
+  const sl=document.getElementById('settings-volume-slider');if(sl)sl.value=Math.round(volume*100);
+}
+
+function saveSettingsModal(){
+  const cb=document.getElementById('setting-newcard');
+  if(cb)showNewWordCard=cb.checked;
+  saveSettings();
+  const overlay=document.querySelector('.edit-overlay');if(overlay)overlay.remove();
+}
+
+function openStats(){
+  const all=getAllWords();
+  const tier1=all.filter(w=>getStars(w.id)>=1&&getStars(w.id)<3).length;
+  const tier2=all.filter(w=>getStars(w.id)>=3&&getStars(w.id)<6).length;
+  const tier3=all.filter(w=>getStars(w.id)>=6&&getStars(w.id)<9).length;
+  const mastered=all.filter(w=>getStars(w.id)>=9).length;
+  const newLearnt=all.filter(w=>getStars(w.id)>0||(progress[w.id]&&progress[w.id].wrongCount>0)).length;
+  const ls=getLifetimeStats();
+  const total=ls.correct+ls.incorrect;
+  const acc=total>0?Math.round((ls.correct/total)*100):0;
+  const overlay=document.createElement('div');overlay.className='edit-overlay';
+  overlay.innerHTML=`<div class="edit-modal" style="max-width:360px">
+    <h3 style="margin-bottom:16px">📊 Stats</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
+      <div style="background:#0f172a;border-radius:10px;padding:12px 14px">
+        <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Word Progress</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="color:#fbbf24">⭐ Yellow tier (1–3 stars)</span><span style="font-weight:700;color:#f3f4f6">${tier1}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="color:#f97316">🟠 Orange tier (4–6 stars)</span><span style="font-weight:700;color:#f3f4f6">${tier2}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="color:#a78bfa">💜 Purple tier (7–8 stars)</span><span style="font-weight:700;color:#f3f4f6">${tier3}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="color:#22d3ee">💎 Mastered (9 stars)</span><span style="font-weight:700;color:#f3f4f6">${mastered}</span>
+          </div>
+          <div style="border-top:1px solid #1f2937;padding-top:6px;margin-top:2px;display:flex;justify-content:space-between;align-items:center">
+            <span style="color:#9ca3af">Total words encountered</span><span style="font-weight:700;color:#f3f4f6">${newLearnt} / ${all.length}</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:#0f172a;border-radius:10px;padding:12px 14px">
+        <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Lifetime Answers</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between"><span style="color:#34d399">✓ Correct</span><span style="font-weight:700;color:#f3f4f6">${ls.correct.toLocaleString()}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:#f87171">✗ Incorrect</span><span style="font-weight:700;color:#f3f4f6">${ls.incorrect.toLocaleString()}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:#9ca3af">Accuracy</span><span style="font-weight:700;color:#f3f4f6">${acc}%</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <button class="btn btn-secondary btn-full" onclick="this.closest('.edit-overlay').remove()">Close</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});
+}function setVolume(val){volume=parseInt(val)/100;localStorage.setItem(STORAGE.volume,volume.toString());updateSettingsVolIcon()}
+function toggleMute(){if(volume>0){window._pv=volume;volume=0}else{volume=window._pv||.7}localStorage.setItem(STORAGE.volume,volume.toString());updateVolumeIcon();updateSettingsVolIcon()}
+function updateVolumeIcon(){}
+
+// ============ INIT ============
+loadStorage();loadSettings();showScreen('menu');
+
+// Shrink quiz card when iOS keyboard appears (visual viewport shrinks)
+// Keyboard layout: screen is fixed so content stays put when keyboard opens
+
+</script>
+</body>
+</html>
